@@ -21,3 +21,7 @@ an aggregation on this.
 It is currently limited to motifs with 2 and 3 nodes because of the sheer number
 of combinations for 4 nodes and more. This will have to wait until I find a way
 to distribute the operations properly.
+
+The motifs are called `vertices_edges_id`, so `3_3_2` is a motif with three
+vertices, three edges, and the unique conformation 2. Look at the `hashes`
+object to see which motif this is.
