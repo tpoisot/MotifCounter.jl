@@ -15,10 +15,7 @@ function hashmat(x)
 end
 
 function unhashmat(x)
-  c = Int64[]
-  for i in 1:length(x)
-    push!(c, parse(Int64, x[i]))
-  end
+  c = vec([parse(Int64, element) for element in x])
   V = round(Int64, sqrt(length(x)))
-  return reshape(vec(c), (V, V))
+  return reshape(c, (V, V))
 end
