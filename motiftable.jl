@@ -3,10 +3,10 @@ using JSON
 @everywhere include("utils.jl")
 
 function generatemotifs(V, E)
-  seed = vec([zeros(Int64, V^2-E), ones(Int64, E)])
+  seed = vec([zeros(Int64, V^2-E); ones(Int64, E)])
   t_hashes = pmap(hashmat, unique(permutations(seed)))
   t_hashes = filter((x) -> x != nothing, t_hashes)
-  hashes = {x => unhashmat(x) for x in t_hashes}
+  hashes = Dict{Any,Any}([x => unhashmat(x) for x in t_hashes])
   return hashes
 end
 
