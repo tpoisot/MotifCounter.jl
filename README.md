@@ -2,13 +2,13 @@
 
 Step 1 - generate the motif dict
 
-```sh
+``` sh
 julia motiftable.jl
 ```
 
 Step 2 - run the analysis for the IWDB dataset
 
-```sh
+``` sh
 julia test.jl
 ```
 

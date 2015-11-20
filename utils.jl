@@ -7,7 +7,7 @@ function nonempty(A::Array{Int64, 2})
 end
 
 function hashmat(x)
-  V = int(sqrt(length(x)))
+  V = round(Int64, sqrt(length(x)))
   A = reshape(x, (V, V))
   if nonempty(A)
     return mhash(A)
@@ -17,8 +17,8 @@ end
 function unhashmat(x)
   c = Int64[]
   for i in 1:length(x)
-    push!(c, int(string(x[i])))
+    push!(c, parse(Int64, x[i]))
   end
-  V = int(sqrt(length(x)))
+  V = round(Int64, sqrt(length(x)))
   return reshape(vec(c), (V, V))
 end
