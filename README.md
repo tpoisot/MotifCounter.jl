@@ -14,14 +14,15 @@ julia test.jl
 
 # Some notes
 
-It's not that elegant. The first step generates a giant hash table (which really
-is the transformation of the matrix into a string). Then motif counting is just
-an aggregation on this.
-
-It is currently limited to motifs with 2 and 3 nodes because of the sheer number
-of combinations for 4 nodes and more. This will have to wait until I find a way
-to distribute the operations properly.
+It's more elegant than the first version! The initial unique vectors are
+generated using a binary tree. Then they are folded into matrices, and the
+matrices are compared, to identify the unique motifs. This is actually fast
+up to 4 nodes, and still feasible for 5 and 6.
 
 The motifs are called `vertices_edges_id`, so `3_3_2` is a motif with three
 vertices, three edges, and the unique conformation 2. Look at the `hashes`
 object to see which motif this is.
+
+The motif table only needs to be generated once. But after this, the operations
+become *fast*. Running a complete motif analysis on the `test.jl` file,
+without any parallelism, takes about a minute.

@@ -28,11 +28,13 @@ function countmotifs(A::Array{Int64, 2}, msize) # TODO motif dict
   for nbunch in nodes_id
     sub_A = A[collect(nbunch),collect(nbunch)]
     if nonempty(sub_A)
-      V = 3
+      V = size(sub_A)[1]
       E = sum(sub_A)
-      m_sub_A = mhash(sub_A)
-      m_id = string(V)*"_"*string(E)*"_"*string(hashes[string(V)][string(E)][m_sub_A])
-      push!(motifs, m_id)
+      if(E >= (V-1))
+         m_sub_A = mhash(sub_A)
+         m_id = string(V)*"_"*string(E)*"_"*string(hashes[string(V)][string(E)][m_sub_A])
+         push!(motifs, m_id)
+      end
     end
   end
   mcounts = {x => sum(motifs .== x) for x in unique(motifs)}
@@ -45,7 +47,7 @@ end
 
 function wrapIWDB(x::ASCIIString)
   ok_mat = x |> buildIWDBname |> getIWDB |> cleanmatrix
-  return countmotifs(ok_mat, 3)
+  return countmotifs(ok_mat, 4)
 end
 
 data_names = [
