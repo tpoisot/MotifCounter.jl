@@ -22,3 +22,28 @@ function unhashmat(x)
   V = round(Int64, sqrt(length(x)))
   return reshape(vec(c), (V, V))
 end
+
+function from_binarytree(h, s)
+   tree = zeros(Int64, 2^(h+1)-2)
+   for i in 1:length(tree)
+      if iseven(i)
+         tree[i] = 1
+      end
+   end
+   terminal_nodes = (length(tree)-2^h+1):length(tree)
+   paths = []
+   for n in terminal_nodes
+      i = h
+      position = n
+      sequence = zeros(Int64, h)
+      while(i > 0)
+         sequence[i] = tree[position]
+         position = round(Int,floor((position - 1)/2))
+         i = i-1
+      end
+      if sum(sequence) == s
+         push!(paths, sequence)
+      end
+   end
+   return paths
+end
