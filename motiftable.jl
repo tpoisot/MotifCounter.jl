@@ -27,37 +27,108 @@ function generatemotifs(V, E)
 end
 
 function identifymotifs(motif_set)
-  hash_set = Dict()
-  known_motifs = 1
-  for k in collect(keys(motif_set))
-    A = motif_set[k]
-    orders = collect(permutations(vec(1:size(A, 1))))
-    # We generate a list of hashes
-    list = ASCIIString[]
-    for o1 in orders
-        push!(list, mhash(A[o1, o1]))
-    end
-    # Is ANY of the hash in the hash_set already?
-    is_known = false
-    has_id = 0
-    for l in list
-      if l in keys(hash_set)
-        is_known = true
-        has_id = hash_set[l]
+   hash_set = Dict()
+
+   #=
+   How many motifs do we know at the beginning? 0. Well, 1, because the first
+      motif we'll come across will necessarilly be a new one.
+   =#
+   known_motifs = 1
+
+   #=
+   We will then move through all hashes, i.e. all unique matrix conformations.
+   =#
+   for k in collect(keys(motif_set))
+
+      #=
+      The first step is to collect the matrix to be evaluated in A
+      =#
+      A = motif_set[k]
+
+      #=
+      Then, we simply look at all the possible permutations of rows orders.
+         The columns HAVE to be re-ordered in the same way since A is the
+         adjacency matrix that represents the motif.
+      =#
+      orders = collect(permutations(vec(1:size(A, 1))))
+
+      #=
+      This empty array will store the representations of every possible order.
+      =#
+      list = ASCIIString[]
+
+      #=
+      For every order, we re-order the matrix, hash it, and push it to the list
+         of all possible unique conformations. This is an OK overhead because we 
+         are often limited to motifs with V <= 5, so that even V! permutations
+         are OK.
+      =#
+      for o1 in orders
+         push!(list, mhash(A[o1, o1]))
       end
-    end
-    if is_known
+
+      #=
+      We know want to know whether we already know this motif. By default, we
+         assume that no, we don't ...
+      =#
+      is_known = false
+
+      #=
+         ... and it has therefore no known id. But this will change.
+      =#
+      has_id = 0
+
+      #=
+      Then for every possible conformation in the list (the list
+         is actually the unique hashes) ...
+      =#
       for l in list
-        hash_set[l] = has_id
+
+         #=
+         It is fairly simple. If the motif is know, i.e. if it is in the list
+            of all hashes,
+         =#
+         if l in keys(hash_set)
+
+            #=
+            We mark it as known, and give it an ID.
+            =#
+            is_known = true
+            has_id = hash_set[l]
+            # TODO we could break of the loop at this point
+         end
       end
-    else
-      for l in list
-        hash_set[l] = known_motifs
+
+      #=
+      Then, IF we know this motif...
+      =#
+      if is_known
+
+         #=
+         ... we put it's ID in the hash_set ...
+         =#
+         for l in list
+            hash_set[l] = has_id
+         end
+      else
+
+         #=
+         ... but if not, we create a new motif
+         =#
+         for l in list
+            hash_set[l] = known_motifs
+         end
+
+         #=
+         We implement in the end, because, remember, we started at 1 known motif.
+         =#
+         known_motifs += 1
       end
-      known_motifs += 1
-    end
-  end
-  return hash_set
+   end
+   #=
+   Done! Good job.
+   =#
+   return hash_set
 end
 
 hashes = Dict()
