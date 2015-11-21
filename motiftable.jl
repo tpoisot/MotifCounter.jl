@@ -49,7 +49,8 @@ for V in 2:4
   hashes[V] = Dict()
   for E in (V-1):V^2
     println("V: ", V, "\tE: ", E)
-    hashes[V][E] = identifymotifs(generatemotifs(V, E));
+    motifs = generatemotifs(V, E)
+    hashes[V][E] = identifymotifs(motifs)
   end
 end
 
