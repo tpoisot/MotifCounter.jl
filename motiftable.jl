@@ -3,10 +3,27 @@ using JSON
 @everywhere include("utils.jl")
 
 function generatemotifs(V, E)
-  t_hashes = pmap(hashmat, from_binarytree(V^2, E))
-  t_hashes = filter((x) -> x != nothing, t_hashes)
-  hashes = Dict{Any,Any}([x => unhashmat(x) for x in t_hashes])
-  return hashes
+   
+   #=
+   The first step is to generate a binary tree of depth V^2
+   The from_binarytree function does that, and only returns paths with
+      exactly E interactions. This is the entire set of unique permutations
+      of E in V^2 elements.
+   =#
+   t_hashes = pmap(hashmat, from_binarytree(V^2, E))
+   
+   #=
+   TODO maybe this next line will have to be removed
+   =#
+   t_hashes = filter((x) -> x != nothing, t_hashes)
+
+   #=
+   Finally, we return an Dict where every key is a hash (the hash is
+      the unfolded matrix), and the value is the matrix itself, at the right
+      dimension.
+   =#
+   hashes = Dict{Any,Any}([x => unhashmat(x) for x in t_hashes])
+   return hashes
 end
 
 function identifymotifs(motif_set)
