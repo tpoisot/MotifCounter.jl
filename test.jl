@@ -47,7 +47,7 @@ end
 
 function wrapIWDB(x::ASCIIString)
   ok_mat = x |> buildIWDBname |> getIWDB |> cleanmatrix
-  return countmotifs(ok_mat, 4)
+  return countmotifs(ok_mat, 3)
 end
 
 data_names = [
@@ -70,13 +70,14 @@ data_names = [
 IWDBmotifs = {x => wrapIWDB(x) for x in data_names}
 
 nrows = sum([length(v) for (k,v) in IWDBmotifs])
-iwdb = DataFrame([Symbol, Symbol, Int64], [:fw, :motif, :count], nrows)
+iwdb = DataFrame([Symbol, Symbol, Symbol, Int64], [:fw, :motif, :edges, :count], nrows)
 
 cr = 1
 for (fw, mc) in IWDBmotifs
   for (mn, cn) in mc
     iwdb[:fw][cr] = symbol(fw)
     iwdb[:motif][cr] = symbol(mn)
+    iwdb[:edges][cr] = symbol(split(mn,"_")[2])
     iwdb[:count][cr] = cn
     cr += 1
   end
@@ -95,6 +96,6 @@ end
 a_iwdb = aggregate(iwdb, :fw, prop)
 
 draw(
-  PDF("motif_iwdb.pdf", 15cm, 10cm),
-  plot(a_iwdb, x="fw", color="motif_prop", y="count_prop", Geom.bar)
+  PDF("motif_iwdb.pdf", 30cm, 10cm),
+  plot(a_iwdb, x="fw", xgroup="edges_prop", color="motif_prop", y="count_prop", Geom.subplot_grid(Geom.bar))
 )
