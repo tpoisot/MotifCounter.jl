@@ -51,20 +51,20 @@ function wrapIWDB(x::ASCIIString)
 end
 
 data_names = [
-  "AkatoreA",
-  "AkatoreB",
-  "Catlins",
-  "Berwick",
-  "Narrowdale",
-  "Blackrock",
-  "Broad",
-  "DempstersSu",
-  "DempstersAu",
-  "DempstersSp",
-  "German",
-  "Healy",
-  "LilKyeburn",
-  "Stony"
+   "AkatoreA",
+   "AkatoreB",
+   "Catlins",
+   "Berwick",
+   "Narrowdale",
+   "Blackrock",
+   "Broad",
+   "DempstersSu",
+   "DempstersAu",
+   "DempstersSp",
+   "German",
+   "Healy",
+   "LilKyeburn",
+   "Stony"
 ]
 
 IWDBmotifs = {x => wrapIWDB(x) for x in data_names}
